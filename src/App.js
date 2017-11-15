@@ -203,11 +203,12 @@ class StrengthsImprovements extends Component {
       [{P1}, {P2}, {P3}, {N1}, {N2}, {N3}].forEach(item=>{
         const key = Object.keys(item).shift();
         const value = item[key];
+        const type = key[0];
         if(value){
-          const n = value.toLowerCase();
+          const n = `${type.toLowerCase()} - ${value.toLowerCase()}`;
           if(!grouped[n]){
             grouped[n] = {
-              type: key[0],
+              type,
               value,
               count: 0
             };
