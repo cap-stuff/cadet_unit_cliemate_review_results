@@ -13,7 +13,8 @@ import {
   PieChart,
   Pie,
   Tooltip,
-  Cell
+  Cell,
+  ResponsiveContainer
 } from 'recharts';
 
 const answerMap = {
@@ -48,14 +49,16 @@ class AnswerSummaryTable extends Component {
     </tr>);
 
     return (
-      <table className="answers-summary-table">
-        <thead>
-          {headers}
-        </thead>
-        <tbody>
-          {tableSummary}
-        </tbody>
-      </table>
+      <div className="one-third">
+        <table className="answers-summary-table">
+          <thead>
+            {headers}
+          </thead>
+          <tbody>
+            {tableSummary}
+          </tbody>
+        </table>
+      </div>
     );
   }
 };
@@ -66,12 +69,14 @@ class AnswerSummaryPolar extends Component {
       answerDetails: data
     } = this.props;
     return (
-      <RadarChart cx={300} cy={250} outerRadius={150} width={600} height={500} data={data}>
-          <PolarGrid />
-          <PolarAngleAxis dataKey="name" />
-          <PolarRadiusAxis/>
-          <Radar name="Mike" dataKey="count" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6}/>
+      <ResponsiveContainer width="33%" height={400} className="one-third">
+        <RadarChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+        <PolarGrid />
+        <PolarAngleAxis dataKey="name" />
+        <PolarRadiusAxis/>
+        <Radar name="Mike" dataKey="count" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6}/>
         </RadarChart>
+      </ResponsiveContainer>
     );
   }
 }
@@ -95,24 +100,26 @@ class AnswerSummaryPie extends Component {
       answerDetails: data
     } = this.props;
     return (
-      <PieChart width={800} height={400}>
+      <ResponsiveContainer width="33%" height={400} className="one-third">
+        <PieChart>
         <Pie
-          isAnimationActive={false}
-          dataKey="count"
-          data={data}
-          cx={200}
-          cy={200}
-          labelLine={false}
-          label={renderCustomizedPieLabel}
-          outerRadius={80}>
-          {
-            data.map((entry, index)=>{
-              return <Cell key={index} fill={COLORS[index % COLORS.length]} />;
-            })
-          }
+        isAnimationActive={false}
+        dataKey="count"
+        data={data}
+        cx={200}
+        cy={200}
+        labelLine={false}
+        label={renderCustomizedPieLabel}
+        outerRadius={80}>
+        {
+          data.map((entry, index)=>{
+            return <Cell key={index} fill={COLORS[index % COLORS.length]} />;
+          })
+        }
         </Pie>
         <Tooltip/>
-       </PieChart>
+        </PieChart>
+      </ResponsiveContainer>
     );
   }
 }
@@ -134,15 +141,9 @@ class AnswerSummary extends Component {
 
     return (
       <div>
-        <div className="one-third">
-          <AnswerSummaryTable answers={answers} answerDetails={answerDetails} totalAnswers={totalAnswers} />
-        </div>
-        <div className="one-third">
-          <AnswerSummaryPolar answers={answers} answerDetails={answerDetails} totalAnswers={totalAnswers} />
-        </div>
-        <div className="one-third">
-          <AnswerSummaryPie answers={answers} answerDetails={answerDetails} totalAnswers={totalAnswers} />
-        </div>
+        <AnswerSummaryTable answers={answers} answerDetails={answerDetails} totalAnswers={totalAnswers} />
+        <AnswerSummaryPolar answers={answers} answerDetails={answerDetails} totalAnswers={totalAnswers} />
+        <AnswerSummaryPie answers={answers} answerDetails={answerDetails} totalAnswers={totalAnswers} />
       </div>
     );
   }
@@ -161,7 +162,8 @@ class Question extends Component {
       <div>
         <h3>{section}:{topic}</h3>
         <p>{description}</p>
-        <AnswerSummary answers={answers} />
+        <div><AnswerSummary answers={answers} /></div>
+        <div className="clearfix" />
       </div>
     );
   }
